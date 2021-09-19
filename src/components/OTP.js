@@ -1,7 +1,156 @@
-import React from 'react'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import otpImg from '../img/OTP.png'
+import pencil from '../img/svg/pencil.svg'
 
-export default function OTP() {
+const Container = styled.div`
+        max-width: 500px;
+        margin: auto;
+        padding: 2em;
+    `;
+
+const ImgBox = styled.div`
+    img{
+        max-width: 276px;
+    }
+`;
+
+const ContentBox = styled.div`
+    text-align: center;
+
+
+    p {
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 22px;
+        color: #1C2A32;
+    }
+
+    span{
+        color: #567DF4;
+        font-weight: 400;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+`;
+
+const InputNums = styled.div`
+    input {
+        max-width: 55px;
+        border: 1px solid #DFE7E6;
+        box-sizing: border-box;
+        border-radius: 10px;
+        padding: 0.5em;
+        text-align: center;
+    }
+` ;
+
+const VerifyBtn = styled.div`
+    button{
+        background-color: #2A6059;
+        text-align: center;
+        color: #fff;
+        font-weight: 700;
+        line-height: 25px;
+        letter-spacing: 0.04em;
+        border: none;
+        border-radius: 10px;
+        padding: 0.5em 7.5em;
+    }
+
+` ;
+const OTPReceive = styled.div`
+    p{
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 22px;
+        color: #7C7C7C; 
+    }
+    
+    span{
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 22px;
+        color: #2A6059; 
+        text-transform: uppercase;
+
+    }
+` ;
+
+const Wrapper = styled.div``;
+
+
+export default function OTP(props) {
+
+    const [input , setInput] = useState({
+        num1: '',
+        num2: '',
+        num3: '',
+        num4: ''
+    });
+    const [ userOTP , setOTP] = useState('');
+
+    const handleOnChange = (event)=>{
+
+        let reg = /^([0-9])$/;
+        if (reg.test(event.target.value) || event.target.value.length === 0){
+            const {name , value} = event.target;
+            setInput({
+                ...input ,
+                [name] : value
+            });
+            
+            let inputNum = Number(event.target.id.slice(3,));
+            if (inputNum < 4 && reg.test(event.target.value)){
+                document.getElementById(`num${inputNum+1}`).focus();
+            }
+            setOTP(Object.values(input).join(""));
+            
+        }
+    }
+    
+    const handleVerifyClick = ()=>{
+        setOTP(Object.values(input).join(""));
+        console.log(userOTP);
+    }
+    
+    const handleOnInput = ()=>{
+        setOTP(Object.values(input).join(""));
+    }
+
+
     return (
-        <h1>d</h1>
+      
+            <Container>
+                <ImgBox className="d-flex justify-content-center align-items-center px-3">
+                    <img src={otpImg} alt="" />
+                </ImgBox>
+
+                <ContentBox className="my-5">
+                    <p>We have a sent a verification code to <br /> your registered phone number</p>
+                    <span className="d-flex justify-content-center align-items-center">{props.phone} <img src={pencil} alt="" /> </span>
+                </ContentBox>
+
+                <Wrapper className="px-3">
+                    <InputNums className="d-flex justify-content-center gap-4">
+                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num1"  value={input.num1} id="num1" onChange={handleOnChange}/>
+                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num2"  value={input.num2} id="num2" onChange={handleOnChange}/>
+                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num3"  value={input.num3} id="num3" onChange={handleOnChange}/>
+                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num4"  value={input.num4} id="num4" onChange={handleOnChange}/>
+                    </InputNums>
+                </Wrapper>
+
+                <VerifyBtn className="d-flex justify-content-center align-items-center my-4 mx-2">
+                    <button type="button" onClick={handleVerifyClick}>Verify</button>
+                </VerifyBtn>
+
+                <OTPReceive className="text-center px-4">    
+                    <p className="mb-1">Didn't receive OTP</p>
+                    <span>Resend</span>
+                </OTPReceive>
+
+            </Container>
+       
     )
 }
