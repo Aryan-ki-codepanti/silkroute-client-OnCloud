@@ -13,8 +13,8 @@ function App() {
 
     return (
         <>
-            {/* <SignUp /> */}
-            <OTP phone="8700740353" />
+            <SignUp />
+            {/* <OTP phone="8700740353" /> */}
         </>
     );
 }
