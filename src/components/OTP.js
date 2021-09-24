@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect } from 'react'
 import styled from 'styled-components'
 import otpImg from '../img/OTP.png'
 import pencil from '../img/svg/pencil.svg'
+import axios from 'axios'
+
 
 const Container = styled.div`
         max-width: 500px;
@@ -105,52 +107,75 @@ export default function OTP(props) {
             if (inputNum < 4 && reg.test(event.target.value)){
                 document.getElementById(`num${inputNum+1}`).focus();
             }
-            setOTP(Object.values(input).join(""));
-            
+            else{
+                document.getElementById("verifyBtn").focus();
+            }            
         }
     }
     
     const handleVerifyClick = ()=>{
         setOTP(Object.values(input).join(""));
-        console.log(userOTP);
+
+        let phone = localStorage.getItem("phone");
+        
+        axios.get(`http://localhost:3001/verify?phone=${phone}&code=${userOTP}`)
+                                                                .then(res => {
+                                                                    console.log(res.data.valid);
+                                                                }).catch(err => {
+                                                                    console.log(err);
+                                                                });
+
     }
     
     const handleOnInput = ()=>{
         setOTP(Object.values(input).join(""));
     }
+    
+    useEffect(()=>{
+        setOTP(Object.values(input).join(""));
+    } , [input.num1 , input.num2 , input.num3 , input.num4]); // eslint-disable-line
+    
+    
+    useEffect(() => {
+        let phone = localStorage.getItem("phone");
+        axios.get(`http://localhost:3001/login?phone=${phone}`).then().catch(err => {
+            console.log(err);
+        });
+    }, []);
 
-
+    // fetch phone number from localStorage
+    const phone = localStorage.getItem("phone"); 
+    
     return (
-      
-            <Container>
-                <ImgBox className="d-flex justify-content-center align-items-center px-3">
-                    <img src={otpImg} alt="" />
-                </ImgBox>
+        <Container>
+            <ImgBox className="d-flex justify-content-center align-items-center px-3">
+                <img src={otpImg} alt="" />
+            </ImgBox>
 
-                <ContentBox className="my-5">
-                    <p>We have a sent a verification code to <br /> your registered phone number</p>
-                    <span className="d-flex justify-content-center align-items-center">{props.phone} <img src={pencil} alt="" /> </span>
-                </ContentBox>
+            <ContentBox className="my-5">
+                <p>We have a sent a verification code to <br /> your registered phone number</p>
+                <span  className="d-flex justify-content-center align-items-center">{phone} <img src={pencil} alt="" /> </span>
+            </ContentBox>
 
-                <Wrapper className="px-3">
-                    <InputNums className="d-flex justify-content-center gap-4">
-                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num1"  value={input.num1} id="num1" onChange={handleOnChange}/>
-                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num2"  value={input.num2} id="num2" onChange={handleOnChange}/>
-                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num3"  value={input.num3} id="num3" onChange={handleOnChange}/>
-                        <input autoComplete="off" onInput={handleOnInput} type="tel" name="num4"  value={input.num4} id="num4" onChange={handleOnChange}/>
-                    </InputNums>
-                </Wrapper>
+            <Wrapper className="px-3">
+                <InputNums className="d-flex justify-content-center gap-4">
+                    <input autoComplete="off" onInput={handleOnInput} type="tel" name="num1"  value={input.num1} id="num1" onChange={handleOnChange}/>
+                    <input autoComplete="off" onInput={handleOnInput} type="tel" name="num2"  value={input.num2} id="num2" onChange={handleOnChange}/>
+                    <input autoComplete="off" onInput={handleOnInput} type="tel" name="num3"  value={input.num3} id="num3" onChange={handleOnChange}/>
+                    <input autoComplete="off" onInput={handleOnInput} type="tel" name="num4"  value={input.num4} id="num4" onChange={handleOnChange}/>
+                </InputNums>
+            </Wrapper>
 
-                <VerifyBtn className="d-flex justify-content-center align-items-center my-4 mx-2">
-                    <button type="button" onClick={handleVerifyClick}>Verify</button>
-                </VerifyBtn>
+            <VerifyBtn className="d-flex justify-content-center align-items-center my-4 mx-2">
+                <button id="verifyBtn"  type="button" onClick={handleVerifyClick}>Verify</button>
+            </VerifyBtn>
 
-                <OTPReceive className="text-center px-4">    
-                    <p className="mb-1">Didn't receive OTP</p>
-                    <span>Resend</span>
-                </OTPReceive>
+            <OTPReceive className="text-center px-4">    
+                <p className="mb-1">Didn't receive OTP</p>
+                <span>Resend</span>
+            </OTPReceive>
 
-            </Container>
-       
+        </Container>
+    
     )
 }

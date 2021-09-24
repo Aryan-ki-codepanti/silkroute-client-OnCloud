@@ -1,4 +1,4 @@
-import React, { useState, ReactDOM } from "react";
+import React, { useState } from "react";
 import heroSignUp from "../img/hero-signup.png";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
@@ -80,7 +80,7 @@ export default function SignUp(props) {
                         {signUpBox}
                     </Route>
                     <Route exact path="/otp">
-                        <OTP phone={phoneNumber} />
+                        <OTP/>
                     </Route>
 
                 </Switch>
