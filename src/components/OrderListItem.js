@@ -24,6 +24,10 @@ const ListItem = styled.div`
         border-radius: 2px;
         font-size: 14px;
     }
+
+    .price{
+        width: 2rem;
+    }
 `;  
 
 

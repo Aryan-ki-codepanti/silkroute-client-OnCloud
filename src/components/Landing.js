@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import HelloThere from './HelloThere'
 import HeroLanding from '../img/hero-signup.png';
 import AddOrder from '../img/svg/add.svg';
+import SideMenu from './SideMenu';
 
 
 // styled components
@@ -48,6 +49,9 @@ const AddBtnBox = styled.div`
 export default function Landing() {
     return (
         <Container>
+            <div className="mt-3 mb-4">
+                <SideMenu />
+            </div>
             <HelloThere name="Aryan" />
 
             <ImgBox className="d-flex justify-content-center align-items-center">

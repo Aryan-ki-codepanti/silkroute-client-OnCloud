@@ -60,7 +60,7 @@ const OrderSummaryListItem = (props) => {
                     <h3 className="mb-0">&#8377;<span className="ms-1">{amount}</span></h3>
                 </TopRow>  
                 <BottomRow className="d-flex justify-content-between align-items-center">
-                    <span>{itemNumber}</span>
+                    <span>{itemNumber} Items</span>
                     <p className={`status-${status.toLowerCase()} mb-0`}>{status}</p>
                 </BottomRow> 
             </Wrapper> 
