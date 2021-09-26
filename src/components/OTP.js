@@ -149,12 +149,12 @@ export default function OTP(props) {
     return (
         <Container>
             <ImgBox className="d-flex justify-content-center align-items-center px-3">
-                <img src={otpImg} alt="" />
+                <img src={otpImg} alt="otp-img" />
             </ImgBox>
 
             <ContentBox className="my-5">
                 <p>We have a sent a verification code to <br /> your registered phone number</p>
-                <span  className="d-flex justify-content-center align-items-center">{phone} <img src={pencil} alt="" /> </span>
+                <span  className="d-flex justify-content-center align-items-center">{phone} <img src={pencil} alt="pencil-svg" /> </span>
             </ContentBox>
 
             <Wrapper className="px-3">

@@ -67,7 +67,7 @@ const PaymentSuccessful = (props) => {
             </TopBox>
 
             <ImgBox>
-                <img src={PaymentSuccessfulImg} alt="" />
+                <img src={PaymentSuccessfulImg} alt="payment-successful-png" />
             </ImgBox>
 
             <BottomBox className=" text-center">

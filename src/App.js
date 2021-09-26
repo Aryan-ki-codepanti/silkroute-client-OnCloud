@@ -1,13 +1,16 @@
-import OrderListing from "./components/OrderListing";
+
+import  PaymentSettingsCollapse  from "./components/PaymentSettingsCollapse";
 import "./css/SignUp.css";
 import "./css/utils.css";
+
 
 function App() {
     return (
         <>
-            {/* <div className="container px-4 border border-2 py-5 d-flex justify-content-center flex-row  align-items-center gap-4" style={{width: "500px"}}> */}
-                {/* <OrderSummaryListItem />
-                <OrderSummaryListItem
+            {/* <OrderListing /> */}
+            <div className="container px-4 border border-2 py-5 " style={{width: "500px"}}>
+                <PaymentSettingsCollapse />
+                {/* <OrderSummaryListItem
                     title="Aditya's Order"
                     amount="670"
                     itemNumber="3"
@@ -33,8 +36,8 @@ function App() {
                     message="Pending payment"
                 /> */}
 
-            {/* </div> */}
-            <OrderListing />
+            </div>
+            {/* <Landing name="Aryan" /> */}
 
             {/* <PaymentSuccessful/> */}
             {/* <OrderListing /> */}

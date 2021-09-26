@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
+import PaymentSettingsSVG from "../img/svg/settings.svg";
 import ArrowLeft from "../img/svg/arrow-left.svg";
+import OrderBottomBar from "./OrderBottomBar";
 import OrderListItem from "./OrderListItem";
 
-const BackButton = styled.div``;
+const BackButton = styled.div`
+    img {
+        cursor: pointer;
+    }
+`;
 
 const TitleBox = styled.div`
     input,
@@ -167,9 +172,11 @@ export default function OrderListing() {
     };
 
     return (
+        <>
         <Container className="">
-            <BackButton className="my-3">
+            <BackButton className="mt-3 mb-4 d-flex align-items-center justify-content-between">
                 <img src={ArrowLeft} alt="arrow-left" />
+                <img src={PaymentSettingsSVG} alt="payment-settings-svg" />
             </BackButton>
 
             <TitleBox>
@@ -213,6 +220,9 @@ export default function OrderListing() {
                     );
                 })}
             </ListingBox>
+
+            <OrderBottomBar />
         </Container>
+        </>
     );
 }

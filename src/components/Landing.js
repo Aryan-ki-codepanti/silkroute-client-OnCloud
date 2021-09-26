@@ -55,7 +55,7 @@ export default function Landing() {
             <HelloThere name="Aryan" />
 
             <ImgBox className="d-flex justify-content-center align-items-center">
-                <img src={HeroLanding} alt="" />
+                <img src={HeroLanding} alt="hero-landing-png" />
             </ImgBox>
 
             <HeroText className="mt-1 mb-5">
@@ -67,7 +67,7 @@ export default function Landing() {
             </HeroText>
 
             <AddBtnBox className="d-flex justify-content-center align-items-center mb-2">
-                <img src={AddOrder} alt="" />
+                <img src={AddOrder} alt="add-order-png" />
             </AddBtnBox>
 
         </Container>
