@@ -6,9 +6,10 @@ const Wrapper = styled.div`
     .form-check-input:checked {
         background-color: #2A6059;
         border-color: #2A6059;
-        accent-color: #2A6059 !important;
+        accent-color: #2A6059 !important; 
     }
 `;
+
 
 const PayNow = (props) => {
     const {name} = props; 
@@ -28,7 +29,7 @@ const PayNow = (props) => {
                         name="paymentMode"
                         id="paymentAll"
                     />
-                    <label className="form-check-label" for="paymentAll">
+                    <label className="form-check-label" htmlFor="paymentAll">
                         All
                     </label>
                 </div>
@@ -40,7 +41,7 @@ const PayNow = (props) => {
                         id="paymentUPI"
                         
                     />
-                    <label className="form-check-label" for="paymentUPI">
+                    <label className="form-check-label" htmlFor="paymentUPI">
                         UPI
                     </label>
                 </div>
@@ -52,16 +53,16 @@ const PayNow = (props) => {
                         id="paymentCash"
                         
                     />
-                    <label className="form-check-label" for="paymentCash">
+                    <label className="form-check-label" htmlFor="paymentCash">
                         Cash
                     </label>
                 </div>
     
             </div>
             
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                <label class="form-check-label" for="flexCheckDefault">
+            <div className="form-check">
+                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+                <label className="form-check-label" htmlFor="flexCheckDefault">
                     Remember the settings for {name}
                 </label>
             </div>

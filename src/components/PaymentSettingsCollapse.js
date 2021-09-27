@@ -78,8 +78,8 @@ const PaymentSettingsCollapse = () => {
                 <h3>Payment Settings</h3>
 
                 <PillBox className="d-flex mt-5">
-                    <button onClick={() => setPayTime("now")} className={ payTime === "now" && "btn-active"}> Pay Now </button>
-                    <button onClick={() => setPayTime("later")} className={ payTime === "later" && "btn-active"} > Pay Later </button>
+                    <button onClick={() => setPayTime("now")} className={ payTime === "now" ? "btn-active": ""}> Pay Now </button>
+                    <button onClick={() => setPayTime("later")} className={ payTime === "later" ? "btn-active": ""} > Pay Later </button>
                 </PillBox>
 
                 <ContentBox > 
