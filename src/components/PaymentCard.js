@@ -57,3 +57,9 @@ const PaymentCard = (props) => {
 };
 
 export default PaymentCard;
+
+PaymentCard.defaultProps = {
+    amount: 0,
+    message: "Set message",
+    status: "pending" // or sale
+};

@@ -11,6 +11,11 @@ import NoteSVG from '../img/svg/note.svg';
 
 const Wrapper = styled.div`
     background: rgba(42, 96, 89, 0.12);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 100;
 `;
 
 const IconBox = styled.div`
@@ -35,9 +40,9 @@ const RightIcons = styled.div`
     }
 `;
 
-const OrderBottomBar = () => {
+const OrderBottomBar = ({className}) => {
     return (
-        <Wrapper className="d-flex p-3  ">
+        <Wrapper className={`d-flex p-3`}>
 
             <LeftIcons className="d-flex align-items-center gap-4 flex-grow-1" >
                 <IconBox>

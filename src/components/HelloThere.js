@@ -9,6 +9,8 @@ const HelloThereWrapper = styled.div`
         color: black;
         font-weight: 400;
         font-size: 16px;
+        line-height: 25px;
+        letter-spacing: 0.04em;
     }
 `
 

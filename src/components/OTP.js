@@ -9,6 +9,9 @@ const Container = styled.div`
         max-width: 500px;
         margin: auto;
         padding: 2em;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     `;
 
 const ImgBox = styled.div`

@@ -20,7 +20,7 @@ export default function SignUp(props) {
     };
 
     // dont open it please
-    const signUpBox = (<div className="SignUpBox m-auto p-3">
+    const signUpBox = (<div className="SignUpBox m-auto p-3 d-flex flex-column" style={{minHeight: "100vh"}}>
     <div className="img-box d-flex align-items-center justify-content-center px-3">
         <img src={heroSignUp} alt="sign-up-svg" />
     </div>

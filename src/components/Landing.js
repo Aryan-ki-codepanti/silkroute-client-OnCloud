@@ -11,7 +11,9 @@ const Container = styled.div`
         max-width: 500px;
         margin: auto;
         padding: 1em 2em;
-        
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     `;
 
 
@@ -46,13 +48,14 @@ const AddBtnBox = styled.div`
 `;
 
 
-export default function Landing() {
+export default function Landing(props) {
+    const {username} =  props;
     return (
         <Container>
             <div className="mt-3 mb-4">
                 <SideMenu />
             </div>
-            <HelloThere name="Aryan" />
+            <HelloThere name={username} />
 
             <ImgBox className="d-flex justify-content-center align-items-center">
                 <img src={HeroLanding} alt="hero-landing-png" />
@@ -72,4 +75,8 @@ export default function Landing() {
 
         </Container>
     )
+}
+
+Landing.defaultProps = {
+    username: "Aryan"
 }

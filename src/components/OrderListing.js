@@ -29,6 +29,11 @@ const Container = styled.div`
     margin: auto;
     border: 2px solid #eaeaea;
     padding: 0.6em 0.8em;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 10;
 `;
 
 const InputRowBox = styled.div`
@@ -221,7 +226,7 @@ export default function OrderListing() {
                 })}
             </ListingBox>
 
-            <OrderBottomBar />
+            <OrderBottomBar className="mt-auto" />
         </Container>
         </>
     );
