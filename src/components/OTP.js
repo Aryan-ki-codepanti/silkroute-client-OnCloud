@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import otpImg from '../img/OTP.png'
 import pencil from '../img/svg/pencil.svg'
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 
 const Container = styled.div`
@@ -87,6 +88,9 @@ const Wrapper = styled.div``;
 
 
 export default function OTP(props) {
+    const history = useHistory();
+    const host = process.env.REACT_APP_SERVER_DOMAIN;
+
 
     const [input , setInput] = useState({
         num1: '',
@@ -116,6 +120,20 @@ export default function OTP(props) {
         }
     }
     
+    const createUserIfExists = async(phone) => {
+        // API Call
+        await axios({
+            method: "post",
+            url: `${host}/api/users/create`,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {
+                phone: phone
+            }
+        });
+    }
+
     const handleVerifyClick = ()=>{
         setOTP(Object.values(input).join(""));
 
@@ -123,9 +141,19 @@ export default function OTP(props) {
         
         axios.get(`http://localhost:3001/verify?phone=${phone}&code=${userOTP}`)
                                                                 .then(res => {
-                                                                    console.log(res.data.valid);
+                                                                    const success = res.data.valid;
+                                                                    if (success){
+                                                                        // create user if not exists
+                                                                        createUserIfExists(phone);
+                                                                        // redirect to landing
+                                                                        history.push("/landing");
+                                                                    }
+                                                                    else{
+                                                                        alert("Invalid OTP!!! Try again");
+                                                                    }
                                                                 }).catch(err => {
                                                                     console.log(err);
+                                                                    alert("Invalid OTP!!! Try again");
                                                                 });
 
     }

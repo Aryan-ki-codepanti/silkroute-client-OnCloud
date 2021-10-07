@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import heroSignUp from "../img/hero-signup.png";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, useHistory } from "react-router-dom";
 import OTP from "./OTP";
 
 export default function SignUp(props) {
+    const history = useHistory();
+
+    // redirect if mobile is in localStorage
+    if (localStorage.getItem("phone")){
+        history.push("/landing");
+    }
+
     // store mobile number
     const [phoneNumber, setPhoneNumber] = useState("");
 

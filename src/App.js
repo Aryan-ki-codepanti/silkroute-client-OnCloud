@@ -8,6 +8,7 @@ import "./css/SignUp.css";
 import "./css/utils.css";
 import { BrowserRouter , Route , Switch } from "react-router-dom";
 import SignUp from "./components/SignUp";
+import PaymentSuccessful from "./components/PaymentSuccessful";
 
 function App() {
     return (
@@ -56,6 +57,7 @@ function App() {
                     <Route  path="/" exact component={SignUp} />
                     <Route  path="/landing" exact component={Landing} />
                     <Route  path="/home" exact component={Home} />
+                    <Route  path="/paymentsuccessful" exact component={PaymentSuccessful} />
                     <Route  path="/orderlisting" exact component={OrderListing} />
                 </Switch>
             </BrowserRouter>

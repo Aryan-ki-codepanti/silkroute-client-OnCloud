@@ -5,6 +5,7 @@ import PayLater from './PayLater';
 // styled components 
 
 const Wrapper = styled.div`
+
     h3{
        font-weight : 700;
        font-size: 21px;
@@ -43,7 +44,6 @@ const ContentBox = styled.div`
 `;
 
 const ButtonBox = styled.div`
-
     button{
         text-transform: uppercase;
         font-weight: 900;
@@ -68,33 +68,37 @@ const ButtonBox = styled.div`
 `;
 
 
-const PaymentSettingsCollapse = () => {
+const PaymentSettingsCollapse = ({paymentSettingsVisibility , handleOnSave}) => {
 
     const [payTime , setPayTime] = useState("now");
-
     return (
-        <div style={{borderRadius: "16px 16px 0 0"}}>
+        <>
+        {paymentSettingsVisibility && 
+        <div style={{borderRadius: "16px 16px 0 0" , zIndex: "2000"}} className="mt-auto" >
             <Wrapper>
-                <h3>Payment Settings</h3>
+                <div>
+                    <h3>Payment Settings</h3>
+                    <PillBox className="d-flex mt-5">
+                        <button onClick={() => setPayTime("now")} className={ payTime === "now" ? "btn-active": ""}> Pay Now </button>
+                        <button onClick={() => setPayTime("later")} className={ payTime === "later" ? "btn-active": ""} > Pay Later </button>
+                    </PillBox>
 
-                <PillBox className="d-flex mt-5">
-                    <button onClick={() => setPayTime("now")} className={ payTime === "now" ? "btn-active": ""}> Pay Now </button>
-                    <button onClick={() => setPayTime("later")} className={ payTime === "later" ? "btn-active": ""} > Pay Later </button>
-                </PillBox>
+                    <ContentBox > 
 
-                <ContentBox > 
+                        { payTime === "now" ? (<PayNow />) : (<PayLater />)}
+                        
+                    </ContentBox>
 
-                    { payTime === "now" ? (<PayNow />) : (<PayLater />)}
-                    
-                </ContentBox>
-
-                <ButtonBox className="d-flex gap-3 mt-4">
-                    <button className="btn cancelBtn w-100 ">Cancel</button>
-                    <button className="btn saveBtn w-100 ">Save</button>
-                </ButtonBox>
+                    <ButtonBox className="d-flex gap-3 mt-4">
+                        <button className="btn cancelBtn w-100 ">Cancel</button>
+                        <button className="btn saveBtn w-100 " onClick={handleOnSave}>Save</button>
+                    </ButtonBox>
+                </div>
 
             </Wrapper>
         </div>
+        }
+        </>
     )
 }
 

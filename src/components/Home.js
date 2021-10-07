@@ -5,6 +5,7 @@ import HelloThere from "./HelloThere";
 import PaymentCard from "./PaymentCard";
 import OrderSummaryListItem from "./OrderSummaryListItem";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 // styled components
 const Container = styled.div`
@@ -43,31 +44,82 @@ const OrderListingStatus = styled.div`
 
 const Home = (props) => {
     const { username } = props;
+    const history = useHistory();
+    const host = process.env.REACT_APP_SERVER_DOMAIN;
+
+    // redirect if mobile is not in localStorage
+    if (!localStorage.getItem("phone")){
+        history.push("/");
+    }
+
+
 
     
     const [orderListingStatus, setOrderListingStatus] = useState("pending");
     const [orders , setOrders] = useState([]);
+    const [pendingPayment , setPendingPayment] = useState(0);
+    const [todaySale , setTodaySale] = useState(0);
+    const [paidOrders, setPaidOrders] = useState([]);
+    const [billedOrders, setBilledOrders] = useState([]);
+
+    const handlePendingPayment = (orderList) => {
+        const billedOrders = orderList.filter(order => order.status === "billed");
+        const pendingAmt = billedOrders.map(x => x.amount).reduce((x,y) => x + y);
+        setPendingPayment(prev => pendingAmt);
+
+    }
+
+    const handleTodaySale = (orderList) => {
+        const todayDate = new Date();
+        const todayOrders = orderList.filter(order => {
+            const orderDate = new Date(order.date);
+            return (orderDate.getDate() === todayDate.getDate() 
+                && orderDate.getMonth() === todayDate.getMonth()
+                && orderDate.getFullYear() === todayDate.getFullYear()) ;
+        });
+        const todayAmt = todayOrders.map(x => x.amount).reduce((x,y) => x + y);
+        setTodaySale(prev => todayAmt);
+    };
+
+    const handlePaidOrders = (orderList) => {
+        setPaidOrders(prev => orderList.filter(order => order.status === "paid"));
+    };
+
+    const handleBilledOrders = (orderList) => {
+        setBilledOrders(prev => orderList.filter(order => order.status === "billed"));
+    };
     
     useEffect(() => {
         const getOrders = async (phone)=>{
-            const data = await axios.post('http://localhost:3001/api/orders/' , {
-                phone: phone
+            const data = await axios({
+                method: "post",
+                url: `${host}/api/orders`,
+                data: {phone}
             });
 
             // setting orders
             setOrders(prevOrders => data.data);
-            console.log(data.data);
+            console.log( "orders -> ",  data.data);
+            
+            //TODO handle pending payment and today Sale
+            handlePendingPayment(data.data);
+            handleTodaySale(data.data);
+
+            // setting billed and paid states
+            handlePaidOrders(data.data);
+            handleBilledOrders(data.data);
+
         }
-        getOrders("8700740353");
-        // handle pending payment
         
+        if (localStorage.getItem("phone")){
+            getOrders(localStorage.getItem("phone"));
+        }
+
+
+
     }, []);
     
-    const handlePendingPayment = (orderList) => {
-        const billedOrders = orderList.filter(order => order.status === "billed");
-        const pendingAmt = billedOrders.reduce((x,y) => x.amount + y.amount);
-        return pendingAmt;
-    }
+    
 
     
     return (
@@ -78,8 +130,8 @@ const Home = (props) => {
 
             <HelloThere name={username} />
             <div className="d-flex gap-4 my-3">
-                <PaymentCard status="sale" message="Today's sale" amount="2002"/>
-                <PaymentCard status="pending" message="pending payment" amount="500" />
+                <PaymentCard status="sale" message="Today's sale" amount={todaySale}/>
+                <PaymentCard status="pending" message="pending payment" amount={pendingPayment} />
             </div>
 
 
@@ -97,23 +149,35 @@ const Home = (props) => {
                 {
                     orderListingStatus === "all" ? (
                         
-                        orders.map(order => {
+                        orders?.length === 0 
+                        ? "NO  orders till now :(" 
+                        : orders.map(order => {
                             return (
-                                <OrderSummaryListItem />
+                                <OrderSummaryListItem key={order._id} title={order.title} amount={order.amount} status={order.status} itemNumber={order.items.length} />
                             )
                         }) ) 
                     :
                     (orderListingStatus === "pending" ? (
-                        "Pending"
+                        billedOrders?.length === 0 
+                        ? "NO billed orders  :(" 
+                        : billedOrders.map(order => {
+                            return (
+                                <OrderSummaryListItem key={order._id} title={order.title} amount={order.amount} status={order.status} itemNumber={order.items.length} />
+                            )
+                        })
                         
                     )
                     :
-                    "paid" // paid in update
+                        paidOrders?.length === 0 
+                        ? "No paid orders  :(" 
+                        : paidOrders.map(order => {
+                                return (
+                                    <OrderSummaryListItem key={order._id} title={order.title} amount={order.amount} status={order.status} itemNumber={order.items.length} />
+                                )
+                            }) // paid in update
                     )
                 }
             </OrdersBox>
-
-                <h1 className="mt-auto">Hello</h1>
 
         </Container>
     );

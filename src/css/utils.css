@@ -15,3 +15,11 @@ body{
     align-items: center;
     min-height: 100vh;
 }
+
+.bg-green{
+    background: rgba(42, 96, 89, 0.12);
+}
+
+.bg-grey{
+    background: rgba(0, 0, 0, 0.5);
+}

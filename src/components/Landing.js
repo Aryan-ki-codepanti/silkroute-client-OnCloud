@@ -1,9 +1,11 @@
-import React from 'react'
+import React , { useEffect } from 'react'
 import styled from 'styled-components';
 import HelloThere from './HelloThere'
 import HeroLanding from '../img/hero-signup.png';
 import AddOrder from '../img/svg/add.svg';
 import SideMenu from './SideMenu';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 
 // styled components
@@ -49,7 +51,41 @@ const AddBtnBox = styled.div`
 
 
 export default function Landing(props) {
+    const history = useHistory();
+    const host = process.env.REACT_APP_SERVER_DOMAIN;
+
+    
+
     const {username} =  props;
+    // redirect if mobile is not in localStorage
+    if (!localStorage.getItem("phone")){
+        history.push("/");
+    }
+
+    useEffect(() => {
+        // redirect if there are orders
+        if (localStorage.getItem("phone")){
+            axios({
+                method: "post",
+                url: `${host}/api/orders`,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: {
+                    phone: localStorage.getItem("phone")
+                }
+            }).then(data => {
+                if (data.length !== 0){
+                    history.push("/home");
+                }
+            }) ;
+        }
+    }, []);
+
+    const handleAddOrderLanding = () => {
+        history.push("/orderlisting");
+    }
+
     return (
         <Container>
             <div className="mt-3 mb-4">
@@ -70,7 +106,7 @@ export default function Landing(props) {
             </HeroText>
 
             <AddBtnBox className="d-flex justify-content-center align-items-center mb-2">
-                <img src={AddOrder} alt="add-order-png" />
+                <img src={AddOrder} onClick={handleAddOrderLanding} alt="add-order-png" />
             </AddBtnBox>
 
         </Container>

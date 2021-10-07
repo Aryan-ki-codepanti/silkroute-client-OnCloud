@@ -4,6 +4,9 @@ import PaymentSettingsSVG from "../img/svg/settings.svg";
 import ArrowLeft from "../img/svg/arrow-left.svg";
 import OrderBottomBar from "./OrderBottomBar";
 import OrderListItem from "./OrderListItem";
+import PaymentSettingsCollapse from "./PaymentSettingsCollapse";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const BackButton = styled.div`
     img {
@@ -27,7 +30,6 @@ const Container = styled.div`
     max-width: 500px;
     width: 95%;
     margin: auto;
-    border: 2px solid #eaeaea;
     padding: 0.6em 0.8em;
     min-height: 100vh;
     display: flex;
@@ -37,7 +39,6 @@ const Container = styled.div`
 `;
 
 const InputRowBox = styled.div`
-    border: 2px solid grey;
     min-height: 5vh;
     --placeholder-color: rgba(15, 15, 15, 0.15);
 
@@ -94,7 +95,6 @@ const InputRowBox = styled.div`
 `;
 
 const ListingBox = styled.div`
-    border: 2px solid grey;
     min-height: 3vh;
 `;
 
@@ -118,116 +118,180 @@ export default function OrderListing() {
 
     const [title, setTitle] = useState("");
     const [orderItems, setOrderItems] = useState([]);
+    const [paymentSettingsVisibility, setPaymentSettingsVisibility] =
+        useState(false);
+    const history = useHistory();
+    const host = process.env.REACT_APP_SERVER_DOMAIN;
 
-    const isQty = (num) => {
+    // redirect if phone is not in localStorage
+    if (!localStorage.getItem("phone")) {
+        history.push("/");
+    }
+
+    const isQty = num => {
         const regQty = /^([0-9]){1,}$/;
         return regQty.test(num);
-    }
+    };
 
-    const isPrice = (num) => {
+    const isPrice = num => {
         const reg = /^([0-9]){0,}\.{0,1}([0-9]){1,}$/;
         return reg.test(num);
-    }
+    };
 
     useEffect(() => {
-        document.getElementById("title").focus();
+        if (localStorage.getItem("phone")) {
+            document.getElementById("title").focus();
 
-        document.getElementById("item").addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                document.getElementById("quantity").focus();
-            }
-        });
-
-        document.getElementById("quantity").addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                document.getElementById("pricePerItem").focus();
-            }
-        });
-
-        document
-            .getElementById("pricePerItem")
-            .addEventListener("keydown", (e) => {
+            document.getElementById("item").addEventListener("keydown", e => {
                 if (e.key === "Enter") {
-                    const itemName = document.getElementById("item");
-                    const quantity = document.getElementById("quantity");
-                    const pricePerItem = document.getElementById("pricePerItem");
-
-                    const name = itemName.value;
-                    const qty =  isQty(quantity.value.trim()) ? Number(quantity.value.trim()) : 0;
-                    const price = qty * (isPrice(pricePerItem.value.trim()) ? Number(pricePerItem.value.trim()) : 0);
-                        
-                    itemName.value = "";
-                    quantity.value = "";
-                    pricePerItem.value = "";
-                    itemName.focus();
-                    
-                    setOrderItems(prev => prev.concat({
-                        name: name , 
-                        quantity: qty , 
-                        price: price
-                    }));
-                    console.log("I am fired");
+                    document.getElementById("quantity").focus();
                 }
             });
-        
+
+            document
+                .getElementById("quantity")
+                .addEventListener("keydown", e => {
+                    if (e.key === "Enter") {
+                        document.getElementById("pricePerItem").focus();
+                    }
+                });
+
+            document
+                .getElementById("pricePerItem")
+                .addEventListener("keydown", e => {
+                    if (e.key === "Enter") {
+                        const itemName = document.getElementById("item");
+                        const quantity = document.getElementById("quantity");
+                        const pricePerItem =
+                            document.getElementById("pricePerItem");
+
+                        const name = itemName.value;
+                        const qty = isQty(quantity.value.trim())
+                            ? Number(quantity.value.trim())
+                            : 0;
+                        const price =
+                            qty *
+                            (isPrice(pricePerItem.value.trim())
+                                ? Number(pricePerItem.value.trim())
+                                : 0);
+
+                        itemName.value = "";
+                        quantity.value = "";
+                        pricePerItem.value = "";
+                        itemName.focus();
+
+                        setOrderItems(prev =>
+                            prev.concat({
+                                name: name,
+                                quantity: qty,
+                                price: price,
+                            })
+                        );
+                        console.log("I am fired");
+                    }
+                });
+        }
     }, []);
 
-    const handleOnChangeTitle = (event) => {
-        setTitle(event.target.value)
+    const handleOnChangeTitle = event => {
+        setTitle(event.target.value);
+    };
+
+    const handleOnSave = async () => {
+        console.log("saved");
+        // Make API request here
+
+        const data = {
+            title , 
+            phone: localStorage.getItem("phone"),
+            items: orderItems 
+        }
+
+        const response = await axios({
+            method: "post",
+            url: `${host}/api/orders/create`,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data
+        });
+        console.log(response);
+
+        history.push("/home");
+
     };
 
     return (
         <>
-        <Container className="">
-            <BackButton className="mt-3 mb-4 d-flex align-items-center justify-content-between">
-                <img src={ArrowLeft} alt="arrow-left" />
-                <img src={PaymentSettingsSVG} alt="payment-settings-svg" />
-            </BackButton>
+            <Container className="">
+                <BackButton className="mt-3 mb-4 d-flex align-items-center justify-content-between">
+                    <img src={ArrowLeft} alt="arrow-left" />
+                    <img
+                        src={PaymentSettingsSVG}
+                        alt="payment-settings-svg"
+                        onClick={() =>
+                            setPaymentSettingsVisibility(
+                                prev => !paymentSettingsVisibility
+                            )
+                        }
+                    />
+                </BackButton>
 
-            <TitleBox>
-                <input
-                    type="text"
-                    id="title"
-                    className="px-2 py-1"
-                    placeholder="Order Title"
-                    name="title"
-                    value={title}
-                    onChange={handleOnChangeTitle}
+                <TitleBox>
+                    <input
+                        type="text"
+                        id="title"
+                        className="px-2 py-1"
+                        placeholder="Order Title"
+                        name="title"
+                        value={title}
+                        onChange={handleOnChangeTitle}
+                    />
+                </TitleBox>
+
+                <InputRowBox className="d-flex justify-content-between gap-4 mt-3 py-2 px-2">
+                    <input
+                        type="text"
+                        placeholder="Item"
+                        name="item"
+                        id="item"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Quantity"
+                        name="quantity"
+                        id="quantity"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Price"
+                        name="pricePerItem"
+                        id="pricePerItem"
+                    />
+                </InputRowBox>
+
+                <ListingBox className="my-5">
+                    {orderItems.map((item, idx) => {
+                        return (
+                            <OrderListItem
+                                key={`item${idx}`}
+                                sno={idx + 1}
+                                name={item.name}
+                                quantity={item.quantity}
+                                price={item.price}
+                            />
+                        );
+                    })}
+                </ListingBox>
+
+                {!paymentSettingsVisibility && (
+                    <OrderBottomBar className="mt-auto" />
+                )}
+                <PaymentSettingsCollapse
+                    paymentSettingsVisibility={paymentSettingsVisibility}
+                    handleOnSave={handleOnSave}
                 />
-            </TitleBox>
-
-            <InputRowBox className="d-flex justify-content-between gap-4 py-2 px-2">
-                <input type="text" placeholder="Item" name="item" id="item" />
-                <input
-                    type="text"
-                    placeholder="Quantity"
-                    name="quantity"
-                    id="quantity"
-                />
-                <input
-                    type="text"
-                    placeholder="Price"
-                    name="pricePerItem"
-                    id="pricePerItem"
-                />
-            </InputRowBox>
-
-            <ListingBox className="my-5">
-                {orderItems.map((item, idx) => {
-                    return (
-                        <OrderListItem
-                            key={`item${idx}`}
-                            sno={idx + 1}
-                            name={item.name}
-                            quantity={item.quantity}
-                            price={item.price}
-                        />
-                    );
-                })}
-            </ListingBox>
-
-            <OrderBottomBar className="mt-auto" />
-        </Container>
+            </Container>
         </>
     );
 }
