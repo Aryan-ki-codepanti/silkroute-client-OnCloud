@@ -64,6 +64,9 @@ const Home = (props) => {
 
     const handlePendingPayment = (orderList) => {
         const billedOrders = orderList.filter(order => order.status === "billed");
+        if (billedOrders.length === 0){
+            return
+        }
         const pendingAmt = billedOrders.map(x => x.amount).reduce((x,y) => x + y);
         setPendingPayment(prev => pendingAmt);
 
@@ -77,6 +80,9 @@ const Home = (props) => {
                 && orderDate.getMonth() === todayDate.getMonth()
                 && orderDate.getFullYear() === todayDate.getFullYear()) ;
         });
+        if (todayOrders.length === 0){
+            return
+        }
         const todayAmt = todayOrders.map(x => x.amount).reduce((x,y) => x + y);
         setTodaySale(prev => todayAmt);
     };
@@ -101,13 +107,17 @@ const Home = (props) => {
             setOrders(prevOrders => data.data);
             console.log( "orders -> ",  data.data);
             
-            //TODO handle pending payment and today Sale
-            handlePendingPayment(data.data);
-            handleTodaySale(data.data);
+            if (data.data.length !== 0){
+                //TODO handle pending payment and today Sale
+                console.log("Ran");
+                handlePendingPayment(data.data);
+                handleTodaySale(data.data);
+    
+                // setting billed and paid states
+                handlePaidOrders(data.data);
+                handleBilledOrders(data.data);
+            }
 
-            // setting billed and paid states
-            handlePaidOrders(data.data);
-            handleBilledOrders(data.data);
 
         }
         

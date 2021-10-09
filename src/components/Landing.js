@@ -75,7 +75,7 @@ export default function Landing(props) {
                     phone: localStorage.getItem("phone")
                 }
             }).then(data => {
-                if (data.length !== 0){
+                if (data.data.length !== 0){
                     history.push("/home");
                 }
             }) ;
