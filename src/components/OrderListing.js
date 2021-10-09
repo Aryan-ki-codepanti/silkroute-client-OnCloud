@@ -121,7 +121,7 @@ export default function OrderListing() {
     const [paymentSettingsVisibility, setPaymentSettingsVisibility] =
         useState(false);
     const history = useHistory();
-    const host = process.env.REACT_APP_SERVER_DOMAIN;
+    const host = "https://silkroute-server2.herokuapp.com";
 
     // redirect if phone is not in localStorage
     if (!localStorage.getItem("phone")) {

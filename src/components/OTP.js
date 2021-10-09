@@ -89,7 +89,7 @@ const Wrapper = styled.div``;
 
 export default function OTP(props) {
     const history = useHistory();
-    const host = process.env.REACT_APP_SERVER_DOMAIN;
+    const host = "https://silkroute-server2.herokuapp.com";
 
 
     const [input , setInput] = useState({
@@ -140,7 +140,7 @@ export default function OTP(props) {
 
         let phone = localStorage.getItem("phone");
         
-        axios.get(`http://localhost:3001/verify?phone=${phone}&code=${userOTP}`)
+        axios.get(`https://silkroute-server2.herokuapp.com/verify?phone=${phone}&code=${userOTP}`)
                                                                 .then(res => {
                                                                     const success = res.data.valid;
                                                                     if (success){
@@ -172,7 +172,7 @@ export default function OTP(props) {
     
     useEffect(() => {
         let phone = localStorage.getItem("phone");
-        axios.get(`http://localhost:3001/login?phone=${phone}`).then().catch(err => {
+        axios.get(`https://silkroute-server2.herokuapp.com/login?phone=${phone}`).then().catch(err => {
             console.log(err);
         });
     }, []);

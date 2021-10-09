@@ -45,7 +45,7 @@ const OrderListingStatus = styled.div`
 const Home = (props) => {
     const { username } = props;
     const history = useHistory();
-    const host = process.env.REACT_APP_SERVER_DOMAIN;
+    const host = "https://silkroute-server2.herokuapp.com";
 
     // redirect if mobile is not in localStorage
     if (!localStorage.getItem("phone")){

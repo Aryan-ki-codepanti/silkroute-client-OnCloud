@@ -52,7 +52,7 @@ const AddBtnBox = styled.div`
 
 export default function Landing(props) {
     const history = useHistory();
-    const host = process.env.REACT_APP_SERVER_DOMAIN;
+    const host = "https://silkroute-server2.herokuapp.com";
 
     
 
