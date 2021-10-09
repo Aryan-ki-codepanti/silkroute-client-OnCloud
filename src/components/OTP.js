@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import otpImg from '../img/OTP.png'
 import pencil from '../img/svg/pencil.svg'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useHistory , Redirect } from 'react-router-dom'
 
 
 const Container = styled.div`
@@ -99,6 +99,7 @@ export default function OTP(props) {
         num4: ''
     });
     const [ userOTP , setOTP] = useState('');
+    const [redirect , setRedirect] = useState(null);
 
     const handleOnChange = (event)=>{
 
@@ -146,7 +147,9 @@ export default function OTP(props) {
                                                                         // create user if not exists
                                                                         createUserIfExists(phone);
                                                                         // redirect to landing
-                                                                        history.push("/landing");
+                                                                        // setRedirect(prev => true);
+                                                                        document.location = "/landing";
+                                                                        // history.push("/landing");
                                                                     }
                                                                     else{
                                                                         alert("Invalid OTP!!! Try again");
@@ -179,6 +182,8 @@ export default function OTP(props) {
     
     return (
         <Container>
+
+            {redirect && (<Redirect to="/landing" />)}
             <ImgBox className="d-flex justify-content-center align-items-center px-3">
                 <img src={otpImg} alt="otp-img" />
             </ImgBox>

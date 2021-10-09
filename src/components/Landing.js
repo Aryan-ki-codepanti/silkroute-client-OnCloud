@@ -63,23 +63,30 @@ export default function Landing(props) {
     }
 
     useEffect(() => {
-        // redirect if there are orders
-        if (localStorage.getItem("phone")){
-            axios({
-                method: "post",
-                url: `${host}/api/orders`,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: {
-                    phone: localStorage.getItem("phone")
-                }
-            }).then(data => {
-                if (data.data.length !== 0){
+
+        const doRedirect = async () => {
+            // redirect if there are orders
+            if (localStorage.getItem("phone")){
+                const data = await axios({
+                    method: "post",
+                    url: `${host}/api/orders`,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: {
+                        phone: localStorage.getItem("phone")
+                    }
+                });
+                console.log("land -> " , data.data);
+                if (data.data.length > 0){
+                    console.log("To home");
                     history.push("/home");
                 }
-            }) ;
+            }
         }
+
+        doRedirect();
+
     }, []);
 
     const handleAddOrderLanding = () => {
